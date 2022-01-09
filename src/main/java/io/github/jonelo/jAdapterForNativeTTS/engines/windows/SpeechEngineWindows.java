@@ -90,6 +90,7 @@ public class SpeechEngineWindows extends SpeechEngineAbstract {
                 .replaceAll(CODE_TOKEN_TTS_NAME, voice)
                 .replaceAll(CODE_TOKEN_RATE, Integer.toString(recalcRate(rate)))
                 .replaceAll(CODE_TOKEN_TEXT, escapedText) , output);
+        System.out.println();
         System.out.println(code);
         return new String[]{"-Command", String.join("", QUOTE, code, QUOTE)};
     }

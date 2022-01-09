@@ -28,11 +28,8 @@ import io.github.jonelo.jAdapterForNativeTTS.engines.SpeechEngine;
 import io.github.jonelo.jAdapterForNativeTTS.engines.SpeechEngineNative;
 import io.github.jonelo.jAdapterForNativeTTS.engines.Voice;
 import io.github.jonelo.jAdapterForNativeTTS.engines.VoicePreferences;
-import io.github.jonelo.jAdapterForNativeTTS.engines.exceptions.NotSupportedOperatingSystemException;
-import io.github.jonelo.jAdapterForNativeTTS.engines.exceptions.ParseException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -40,7 +37,7 @@ import java.util.Scanner;
 /**
  * A simple text user interface in order to demonstrate the jAdapterForNativeTTS.
  */
-public class Main2 {
+public class TTSMain {
 
     /**
      * Prints the usage to the standard output.
@@ -50,7 +47,7 @@ public class Main2 {
     }
 
 
-    private void printVoices(List<Voice> voices) {
+    private static void printVoices(List<Voice> voices) {
         // print all voices
         int id = 0;
         for (Voice voice : voices) {
@@ -101,19 +98,9 @@ public class Main2 {
         return voicePreferences;
     }
 
-    /**
-     * Let the user select a voice from a speech engine.
-     *
-     * @param speechEngine an instance of a SpeechEngine
-     * @return the name of the selected voice
-     * @throws IOException          in case of an I/O error
-     * @throws InterruptedException in case of an interrupt
-     * @throws ParseException       in case of an parse error
-     */
-    private Voice selectVoice(SpeechEngine speechEngine) throws InterruptedException, ParseException, IOException {
-
+    private static Voice selectVoice(SpeechEngine speechEngine) throws Exception {
         List<Voice> voices = speechEngine.getAvailableVoices();
-        printVoices(voices);
+//        printVoices(voices);
         Voice vn = voices.stream().filter(x-> x.getCulture().contains("vi-VN")).findAny().orElse(null);
         return vn;
     }
@@ -131,7 +118,7 @@ public class Main2 {
         return text.toString();
     }
 
-    private void sayText(String text , String output) {
+    public static void sayText(String text , String output) {
         try {
             SpeechEngine speechEngine = SpeechEngineNative.getInstance();
             Voice voice = selectVoice(speechEngine);
@@ -155,13 +142,13 @@ public class Main2 {
      *
      * @param args the values passed from the command line
      */
-    public Main2(String[] args) {
+    public TTSMain(String[] args) {
         File f = new File("D:\\Temporary\\deleteable\\AUDIO\\NTKN\\tmp\\test.wav");
         sayText("Quy trình xử lý ô nhiễm dinh dưỡng và tảo độc bằng mô hình công nghệ sinh thái sử dụng thực vật thủy sinh" , f.getAbsolutePath());
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Main2 main = new Main2(args);
+        TTSMain main = new TTSMain(args);
 //        Thread.sleep(5000L);
     }
 }
