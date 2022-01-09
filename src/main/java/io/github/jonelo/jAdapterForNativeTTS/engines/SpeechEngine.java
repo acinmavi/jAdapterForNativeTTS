@@ -36,6 +36,8 @@ public interface SpeechEngine {
 
     String[] getSayOptionsToSayText(String text);
 
+    default String[] getSayOptionsToSayText(String text , String output) { throw new UnsupportedOperationException("not support");}
+
     String[] getSayOptionsToGetSupportedVoices();
 
     Voice parse(String line) throws ParseException;
@@ -52,6 +54,7 @@ public interface SpeechEngine {
     void setVoice(String voice);
 
     void say(String text) throws IOException;
+    void say(String text , String output) throws IOException;
 
     void stopTalking();
 

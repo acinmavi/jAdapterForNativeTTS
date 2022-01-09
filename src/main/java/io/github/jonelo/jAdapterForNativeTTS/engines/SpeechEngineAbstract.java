@@ -92,6 +92,12 @@ public abstract class SpeechEngineAbstract implements SpeechEngine {
         }
     }
 
+    public void say(String text , String output) throws IOException {
+        if (voice != null) {
+            process = ProcessHelper.startApplication(getSayExecutable(), getSayOptionsToSayText(text , output));
+        }
+    }
+
     /**
      * Stop talking the engine
      * Actually it kills the say-process

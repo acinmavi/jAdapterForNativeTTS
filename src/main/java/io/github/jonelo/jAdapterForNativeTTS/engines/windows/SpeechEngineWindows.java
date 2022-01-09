@@ -35,6 +35,7 @@ public class SpeechEngineWindows extends SpeechEngineAbstract {
             CODE_TOKEN_TTS_NAME = "##TTS_NAME##",
             CODE_TOKEN_RATE = "##RATE##",
             CODE_TOKEN_TEXT = "##TEXT##",
+            CODE_TOKEN_OUTPUT = "##OUTPUT##",
             POWER_SHELL_CODE_SAY =
                     String.join("",
                             "Add-Type -AssemblyName System.Speech;",
@@ -42,6 +43,15 @@ public class SpeechEngineWindows extends SpeechEngineAbstract {
                             "$speak.SelectVoice('", CODE_TOKEN_TTS_NAME, "');",
                             "$speak.Rate=", CODE_TOKEN_RATE,";",
                             "$speak.Speak('", CODE_TOKEN_TEXT, "');"),
+            POWER_SHELL_CODE_SAY_WITH_OUTPUT =
+                    String.join("",
+                            "Add-Type -AssemblyName System.Speech;",
+                            "$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;",
+                            "$speak.SelectVoice('", CODE_TOKEN_TTS_NAME, "');",
+                            "$speak.SetOutputToWaveFile('%s');",
+                            "$speak.Rate=", CODE_TOKEN_RATE,";",
+                            "$speak.Speak('", CODE_TOKEN_TEXT, "');",
+                            "$speak.Dispose()"),
 
     POWER_SHELL_CODE_SUPPORTED_VOICES =
             String.join("",
@@ -73,6 +83,16 @@ public class SpeechEngineWindows extends SpeechEngineAbstract {
         return new String[]{"-Command", String.join("", QUOTE, code, QUOTE)};
     }
 
+    @Override
+    public String[] getSayOptionsToSayText(String text, String output) {
+        String escapedText = text.replaceAll("'", "''''");
+        String code = String.format(POWER_SHELL_CODE_SAY_WITH_OUTPUT
+                .replaceAll(CODE_TOKEN_TTS_NAME, voice)
+                .replaceAll(CODE_TOKEN_RATE, Integer.toString(recalcRate(rate)))
+                .replaceAll(CODE_TOKEN_TEXT, escapedText) , output);
+        System.out.println(code);
+        return new String[]{"-Command", String.join("", QUOTE, code, QUOTE)};
+    }
 
     public String[] getSayOptionsToGetSupportedVoices() {
         return new String[]{"-Command", String.join("", QUOTE, POWER_SHELL_CODE_SUPPORTED_VOICES, QUOTE)};
