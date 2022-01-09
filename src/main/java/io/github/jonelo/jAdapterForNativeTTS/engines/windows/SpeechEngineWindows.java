@@ -48,7 +48,7 @@ public class SpeechEngineWindows extends SpeechEngineAbstract {
                             "Add-Type -AssemblyName System.Speech;",
                             "$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;",
                             "$speak.SelectVoice('", CODE_TOKEN_TTS_NAME, "');",
-                            "$speak.SetOutputToWaveFile('%s');",
+                            "$speak.SetOutputToWaveFile('", CODE_TOKEN_OUTPUT, "');",
                             "$speak.Rate=", CODE_TOKEN_RATE,";",
                             "$speak.Speak('", CODE_TOKEN_TEXT, "');",
                             "$speak.Dispose()"),
@@ -86,10 +86,11 @@ public class SpeechEngineWindows extends SpeechEngineAbstract {
     @Override
     public String[] getSayOptionsToSayText(String text, String output) {
         String escapedText = text.replaceAll("'", "''''");
-        String code = String.format(POWER_SHELL_CODE_SAY_WITH_OUTPUT
+        String code = POWER_SHELL_CODE_SAY_WITH_OUTPUT
                 .replaceAll(CODE_TOKEN_TTS_NAME, voice)
                 .replaceAll(CODE_TOKEN_RATE, Integer.toString(recalcRate(rate)))
-                .replaceAll(CODE_TOKEN_TEXT, escapedText) , output);
+                .replaceAll(CODE_TOKEN_OUTPUT, output)
+                .replaceAll(CODE_TOKEN_TEXT, escapedText);
         System.out.println();
         System.out.println(code);
         return new String[]{"-Command", String.join("", QUOTE, code, QUOTE)};
