@@ -6,7 +6,7 @@ Microsoft Windows, GNU/Linux, and macOS are supported.
 
 
 ## What are the system requirements
-* Java 11 or later
+* Java 8 or later
 * Powershell on Windows 10
 * spd-say on GNU/Linux
 * say on macOS
